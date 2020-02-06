@@ -17,7 +17,7 @@ pub struct AWSIoTConfig {
 }
 
 /// AWS IoTを使うためのmqtt optionを作る
-/// 
+///
 pub fn create_mqtt_options(config: AWSIoTConfig) -> Result<MqttOptions, std::io::Error> {
     let client_cert = read_certs_file(config.client_cert_path.unwrap())?;
     let client_key = read_certs_file(config.client_key_path.unwrap())?;
@@ -31,7 +31,7 @@ pub fn create_mqtt_options(config: AWSIoTConfig) -> Result<MqttOptions, std::io:
 }
 
 /// certsファイルを読む
-/// 
+///
 pub fn read_certs_file(file_path: PathBuf) -> Result<Vec<u8>, std::io::Error> {
     let mut cert: Vec<u8> = Vec::new();
     let file = File::open(file_path)?;
@@ -53,10 +53,10 @@ pub fn read_certs_file(file_path: PathBuf) -> Result<Vec<u8>, std::io::Error> {
 /// let end_time = NaiveTime::from_hms(10, 10, 00);
 /// let ontimes = vec![(start_time, end_time)];
 /// let now = NaiveTime::from_hms(10, 05, 00);
-/// let publish_true: bool = is_publish_message(now, ontimes);
+/// let publish_true: bool = is_publish_message(now, &ontimes);
 /// assert!(publish_true);
 /// ```
-pub fn is_publish_message(now: NaiveTime, ontimes: Vec<(NaiveTime, NaiveTime)>) -> bool {
+pub fn is_publish_message(now: NaiveTime, ontimes: &[(NaiveTime, NaiveTime)]) -> bool {
     if ontimes.is_empty() {
         return true;
     }
@@ -68,13 +68,13 @@ pub fn is_publish_message(now: NaiveTime, ontimes: Vec<(NaiveTime, NaiveTime)>) 
 
 /// timeが直列になっているか（交差していないか）
 ///
-pub fn is_straight_time(ontimes: Vec<(NaiveTime, NaiveTime)>) -> bool {
+pub fn is_straight_time(ontimes: &[(NaiveTime, NaiveTime)]) -> bool {
     // check start_time < end_time
     if !ontimes.iter().all(|x| x.0 < x.1) {
         return false;
     }
     // check start_time < other_start_time < end_time
-    let perms = ontimes.into_iter().permutations(2);
+    let perms = ontimes.iter().permutations(2);
     for perm in perms {
         if (perm[0].0 < perm[1].0) && (perm[1].0 < perm[0].1)
             || (perm[0].0 < perm[1].1) && (perm[1].1 < perm[0].1)

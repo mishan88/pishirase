@@ -11,8 +11,8 @@ fn test_read_certs_file() {
 
     assert_eq!(
         text,
-        "-----BEGIN PUBLIC KEY-----\r
-TESTDUMMYPUBLICKEY\r
+        "-----BEGIN PUBLIC KEY-----
+TESTDUMMYPUBLICKEY
 -----END PUBLIC KEY-----"
             .as_bytes()
     )
@@ -22,7 +22,7 @@ TESTDUMMYPUBLICKEY\r
 fn test_is_publish_message_none() {
     assert!(is_publish_message(
         NaiveTime::from_hms(10, 10, 00),
-        Vec::new()
+        &Vec::new()
     ));
 }
 
@@ -30,7 +30,7 @@ fn test_is_publish_message_none() {
 fn test_is_publish_message_true() {
     assert!(is_publish_message(
         NaiveTime::from_hms(10, 00, 00),
-        vec![(
+        &vec![(
             NaiveTime::from_hms(09, 00, 00),
             NaiveTime::from_hms(10, 00, 00)
         )]
@@ -42,7 +42,7 @@ fn test_is_publish_message_false() {
     assert_eq!(
         is_publish_message(
             NaiveTime::from_hms(10, 00, 01),
-            vec![(
+            &vec![(
                 NaiveTime::from_hms(09, 00, 00),
                 NaiveTime::from_hms(10, 00, 00)
             )]
@@ -55,7 +55,7 @@ fn test_is_publish_message_false() {
 fn test_is_publish_message_true_multitimes() {
     assert!(is_publish_message(
         NaiveTime::from_hms(10, 00, 00),
-        vec![
+        &vec![
             (
                 NaiveTime::from_hms(00, 00, 00),
                 NaiveTime::from_hms(01, 00, 00)
@@ -73,7 +73,7 @@ fn test_is_publish_message_false_multitimes() {
     assert_eq!(
         is_publish_message(
             NaiveTime::from_hms(10, 00, 00),
-            vec![
+            &vec![
                 (
                     NaiveTime::from_hms(00, 00, 00),
                     NaiveTime::from_hms(00, 59, 00)
@@ -94,7 +94,7 @@ fn test_is_straight_time() {
         NaiveTime::from_hms(10, 00, 00),
         NaiveTime::from_hms(11, 00, 00),
     )];
-    assert!(is_straight_time(ontimes));
+    assert!(is_straight_time(&ontimes));
 }
 
 #[test]
@@ -103,7 +103,7 @@ fn test_is_straight_time_false() {
         NaiveTime::from_hms(10, 00, 00),
         NaiveTime::from_hms(09, 00, 00),
     )];
-    assert!(!is_straight_time(ontimes));
+    assert!(!is_straight_time(&ontimes));
 }
 
 #[test]
@@ -118,7 +118,7 @@ fn test_is_straight_time_multiple() {
             NaiveTime::from_hms(13, 00, 00),
         ),
     ];
-    assert!(is_straight_time(ontimes));
+    assert!(is_straight_time(&ontimes));
 }
 
 #[test]
@@ -133,5 +133,5 @@ fn test_is_straight_time_multiple_false() {
             NaiveTime::from_hms(11, 30, 00),
         ),
     ];
-    assert!(!is_straight_time(ontimes));
+    assert!(!is_straight_time(&ontimes));
 }
