@@ -1,0 +1,13 @@
+mqtt_host = ""
+client_id = ""
+client_cert_path = ""
+client_key_path = ""
+ca_path = ""
+topic_name = ""
+ontimes = [
+    [
+        "00:00:00",
+        "23:59:59"
+    ]
+]
+timezone = ""
